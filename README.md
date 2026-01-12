@@ -1,343 +1,232 @@
-![Makerkit - Next.js Supabase SaaS Starter Kit \[Lite version\]](apps/web/public/images/makerkit.webp)
+# 🎉 Blog Feature - Complete Implementation
 
-# NEW! Next.js Supabase SaaS Starter Kit (Lite)
+## 📖 Overview
 
-Start building your SaaS faster with our Next.js 15 + Supabase starter kit.
+This repository contains a fully functional Blog feature implemented in **Next.js 15.5.9** with **React 19.2.1**, using **Supabase Auth**, **PostgreSQL**, and **Apollo Client** for GraphQL data fetching.
 
-👉 **Looking for a full-featured SaaS Starter Kit?** [Check out the complete version](https://makerkit.dev)
+The feature is secure, production-ready, and includes:
 
-⭐️ **Why Developers Trust Makerkit:**
-- Production-grade architecture decisions
-- Comprehensive TypeScript setup
-- Modern stack: Next.js 15, Supabase, TailwindCSS v4
-- Quality Code tooling: ESLint v9, Prettier, strict TypeScript, etc.
-- Regular updates and active maintenance
+- Blog listing with pagination
+- Blog creation (protected route)
+- Individual blog details
+- Authentication & MFA support
+- Proper UX/UI with error handling and notifications
 
-PS: the documentation for this kit is still being updated, so please check back later for more details.
+---
 
-## What's Included
+## Add .env varaibles
 
-### Core Architecture
-- 🏗️ Next.js 15 + Turborepo monorepo setup
-- 🎨 Shadcn UI components with TailwindCSS v4
-- 🔐 Supabase authentication & basic DB
-- 🌐 i18n translations (client + server)
-- ✨ Full TypeScript + ESLint v9 + Prettier configuration
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+NEXT_PUBLIC_SUPABASE_GRAPHQL_URL=
 
-### Key Features
-- 👤 User authentication flow
-- ⚙️ User profile & settings
-- 📱 Responsive marketing pages
-- 🔒 Protected routes
-- 🎯 Basic test setup with Playwright
-
-### Technologies
-
-This starter kit provides core foundations:
-
-🛠️ **Technology Stack**:
-- [Next.js 15](https://nextjs.org/): A React-based framework for server-side rendering and static site generation.
-- [Tailwind CSS](https://tailwindcss.com/): A utility-first CSS framework for rapidly building custom designs.
-- [Supabase](https://supabase.com/): A realtime database for web and mobile applications.
-- [i18next](https://www.i18next.com/): A popular internationalization framework for JavaScript.
-- [Turborepo](https://turborepo.org/): A monorepo tool for managing multiple packages and applications.
-- [Shadcn UI](https://shadcn.com/): A collection of components built using Tailwind CSS.
-- [Zod](https://github.com/colinhacks/zod): A TypeScript-first schema validation library.
-- [React Query](https://tanstack.com/query/v4): A powerful data fetching and caching library for React.
-- [Prettier](https://prettier.io/): An opinionated code formatter for JavaScript, TypeScript, and CSS.
-- [Eslint](https://eslint.org/): A powerful linting tool for JavaScript and TypeScript.
-- [Playwright](https://playwright.dev/): A framework for end-to-end testing of web applications.
-
-This kit is a trimmed down version of the [full version of this SaaS Starter Kit](https://makerkit.dev). It is a good way to evaluate small part of the full kit, or to simply use it as a base for your own project.
-
-## Comparing Lite vs Full Version
-
-The lite kit is perfect for:
-- Evaluating our code architecture and patterns
-- Building basic SaaS prototypes
-- Learning our tech stack approach
-- Building a basic SaaS tool
-
-The [full version](https://makerkit.dev) adds production features:
-- 💳 Complete billing and subscription system
-- 👥 Team accounts and management
-- 📧 Mailers and Email Templates (Nodemailer, Resend, etc.)
-- 📊 Analytics (GA, Posthog, Umami, etc.)
-- 🔦 Monitoring providers (Sentry, Baselime, etc.)
-- 🔐 Production database schema
-- ✅ Comprehensive test suite
-- 🔔 Realtime Notifications
-- 📝 Blogging system
-- 💡 Documentation system
-- ‍💻 Super Admin panel
-- 🕒 Daily updates and improvements
-- 🐛 Priority bug fixes
-- 🤝 Support
-- ⭐️ Used by 1000+ developers
-- 💪 Active community members
-- 🏢 Powers startups to enterprises
-
-[View complete feature comparison →](https://makerkit.dev/#pricing)
-
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18.x or later (preferably the latest LTS version)
-- Docker
-- PNPM
-
-Please make sure you have a Docker daemon running on your machine. This is required for the Supabase CLI to work.
-
-### Installation
-
-#### 1. Clone this repository
+### Start the Development Server
 
 ```bash
-git clone https://github.com/makerkit/next-supabase-saas-kit-lite.git
+cd /blog-task
+pnpm dev
 ```
 
-#### 2. Install dependencies
+Server will run on: **http://localhost:3000**
+
+### Test the Blog Feature
+
+1. **View Blog**: Go to http://localhost:3001/blog
+2. **Try Create** (not logged in): Click "Create Post" → Auto-redirect to login
+3. **Create Post** (logged in):
+   - Fill in title (min 3 chars)
+   - Fill in content (min 10 chars)
+   - Click "Publish"
+   - See success toast and redirect
+
+---
+
+### Features Implemented
+
+✅ **Blog List** - Paginated view of all posts  
+✅ **Create Post** - Secure form with validation  
+✅ **Post Detail** - Full post view with metadata  
+✅ **Authentication** - Login required for creating posts  
+✅ **Authorization** - Route protection via middleware  
+✅ **Pagination** - 5 posts per page with navigation  
+✅ **Error Handling** - Comprehensive error messages  
+✅ **User Feedback** - Toast notifications  
+✅ **Responsive Design** - Mobile-friendly UI  
+✅ **MFA Support** - Multi-factor authentication check
+
+### Security Implemented
+
+✅ **Route Protection** - Middleware-based authentication  
+✅ **Session Validation** - JWT verification  
+✅ **MFA Check** - Multi-factor authentication support  
+✅ **User Association** - Posts linked to authenticated user  
+✅ **CSRF Protection** - Built-in Next.js protection  
+✅ **Input Validation** - Zod schema validation
+
+---
+
+### Authentication Flow
+
+```
+User Access /blog/create
+       ↓
+Middleware checks session
+       ↓
+Is user authenticated?
+├─ NO → Redirect to /auth/sign-in?next=/blog/create
+└─ YES → Check MFA requirement
+         ├─ Needs MFA → Redirect to MFA
+         └─ MFA OK → Allow access
+```
+
+### Protected Routes
+
+| Route          | Access          | Requires       |
+| -------------- | --------------- | -------------- |
+| `/blog`        | Public Read     | None           |
+| `/blog/[id]`   | Public Read     | None           |
+| `/blog/create` | Protected Write | Authentication |
+
+---
+
+## 🧪 Testing Scenarios
+
+### Scenario 1: Unauthenticated User
+
+1. Go to `/blog` (✅ Can view)
+2. Click "Create Post" (✅ Redirected to login)
+3. Log in (✅ Auto-redirect to create form)
+
+### Scenario 2: Creating a Post
+
+1. Go to `/blog/create` while logged in
+2. Leave title empty (✅ Shows error)
+3. Type title "Test"
+4. Leave body empty (✅ Shows error)
+5. Type body "This is a test post content"
+6. Click "Publish" (✅ Shows loading, success toast, redirect)
+
+### Scenario 3: Viewing Posts
+
+1. Go to `/blog` (✅ Shows all posts)
+2. Click on a post (✅ Goes to detail page)
+3. Click "Back to Blog" (✅ Returns to list)
+
+### Scenario 4: Pagination
+
+1. If more than 5 posts exist
+2. Page numbers appear at bottom (✅ Can click)
+3. Posts filtered by page (✅ Shows 5 posts per page)
+
+---
+
+### Data Flow
+
+```
+Component
+    ↓
+Apollo Query/Mutation
+    ↓
+GraphQL API (Supabase)
+    ↓
+PostgreSQL Database
+    ↓
+Return to Component
+    ↓
+Render & Notify User
+```
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer         | Technology                |
+| ------------- | ------------------------- |
+| Framework     | Next.js 15.5.9            |
+| Runtime       | React 19.2.1              |
+| GraphQL       | Apollo Client 4.0.12      |
+| Auth          | Supabase (JWT)            |
+| Database      | PostgreSQL (via Supabase) |
+| Forms         | React Hook Form + Zod     |
+| Styling       | Tailwind CSS              |
+| Icons         | Lucide React              |
+| Notifications | Sonner                    |
+| Dates         | dayjs                     |
+
+---
+
+## 🚀 Deployment & Build for Production
 
 ```bash
-pnpm install
+NEXT_PUBLIC_CI=true pnpm build
 ```
 
-#### 3. Start Supabase
+### Pre-deployment Checklist
 
-Please make sure you have a Docker daemon running on your machine.
+- [ ] Update NEXT_PUBLIC_SITE_URL to HTTPS domain
+- [ ] Verify Supabase RLS policies
+- [ ] Test create post flow
+- [ ] Test pagination with many posts
+- [ ] Verify error handling
+- [ ] Load test GraphQL endpoint
+- [ ] Set up monitoring
 
-Then run the following command to start Supabase:
+---
 
-```bash
-pnpm run supabase:web:start
-```
+## 📞 Support & Troubleshooting
 
-Once the Supabase server is running, please access the Supabase Dashboard using the port in the output of the previous command. Normally, you find it at [http://localhost:54323](http://localhost:54323).
+### Common Issues
 
-You will also find all the Supabase services printed in the terminal after the command is executed.
+**"No QueryClient set" error**
 
-##### Stopping Supabase
+- ✅ Component is inside RootProviders
+- Solution: Check provider wrapping
 
-To stop the Supabase server, run the following command:
+**"No Apollo Client" error**
 
-```bash
-pnpm run supabase:web:stop
-```
+- ✅ ApolloClientProvider is in RootProviders
+- Solution: Verify root-providers.tsx includes Apollo provider
 
-##### Resetting Supabase
+**Posts not showing**
 
-To reset the Supabase server, run the following command:
+- ✅ Check GraphQL endpoint URL
+- ✅ Verify Supabase anon key
+- ✅ Check database has posts
+- Solution: Check browser console for API errors
 
-```bash
-pnpm run supabase:web:reset
-```
+**Can't create post**
 
-##### More Supabase Commands
+- ✅ Verify you're logged in
+- ✅ Check title is min 3 chars
+- ✅ Check body is min 10 chars
+- ✅ Check GraphQL endpoint
+- Solution: Check browser console, GraphQL playground
 
-For more Supabase commands, see the [Supabase CLI documentation](https://supabase.com/docs/guides/cli).
+**Redirect loop on /blog/create**
 
-```
-# Create new migration
-pnpm --filter web supabase migration new <name>
+- ✅ Verify authentication is working
+- ✅ Check JWT token in cookies
+- Solution: Log out and log back in
 
-# Link to Supabase project
-pnpm --filter web supabase link
+---
 
-# Push migrations
-pnpm --filter web supabase db push
-```
+## 📚 Additional Resources
 
-#### 4. Start the Next.js application
+### Documentation Files
 
-```bash
-pnpm run dev
-```
+- [Next.js Routing](https://nextjs.org/docs/app/building-your-application/routing)
+- [Next.js Middleware](https://nextjs.org/docs/app/building-your-application/routing/middleware)
+- [Apollo Client](https://www.apollographql.com/docs/react/)
+- [React Hook Form](https://react-hook-form.com/)
+- [Zod Validation](https://zod.dev/)
+- [Supabase Auth](https://supabase.com/docs/guides/auth)
+- [Tailwind CSS](https://tailwindcss.com/docs)
 
-The application will be available at http://localhost:3000.
+### Project Repository
 
-#### 5. Code Health (linting, formatting, etc.)
+- **Workspace**: `/blog-task`
+- **Dev Server**: `http://localhost:3000`
+- **Build Command**: `NEXT_PUBLIC_CI=true pnpm build`
+- **Start Command**: `pnpm dev`
 
-To format your code, run the following command:
-
-```bash
-pnpm run format:fix
-```
-
-To lint your code, run the following command:
-
-```bash
-pnpm run lint
-```
-
-To validate your TypeScript code, run the following command:
-
-```bash
-pnpm run typecheck
-```
-
-Turborepo will cache the results of these commands, so you can run them as many times as you want without any performance impact.
-
-## Project Structure
-
-The project is organized into the following folders:
-
-```
-apps/
-├── web/                  # Next.js application
-│   ├── app/             # App Router pages
-│   │   ├── (marketing)/ # Public marketing pages
-│   │   ├── auth/        # Authentication pages
-│   │   └── home/        # Protected app pages
-│   ├── supabase/        # Database & migrations
-│   └── config/          # App configuration
-│
-packages/
-├── ui/                  # Shared UI components
-└── features/           # Core feature packages
-    ├── auth/           # Authentication logic
-    └── ...
-```
-
-For more information about this project structure, see the article [Next.js App Router: Project Structure](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure).
-
-### Environment Variables
-
-You can configure the application by setting environment variables in the `.env.local` file.
-
-Here are the available variables:
-
-| Variable Name | Description | Default Value |
-| --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | The URL of your SaaS application | `http://localhost:3000` |
-| `NEXT_PUBLIC_PRODUCT_NAME` | The name of your SaaS product | `Makerkit` |
-| `NEXT_PUBLIC_SITE_TITLE` | The title of your SaaS product | `Makerkit - The easiest way to build and manage your SaaS` |
-| `NEXT_PUBLIC_SITE_DESCRIPTION` | The description of your SaaS product | `Makerkit is the easiest way to build and manage your SaaS. It provides you with the tools you need to build your SaaS, without the hassle of building it from scratch.` |
-| `NEXT_PUBLIC_DEFAULT_THEME_MODE` | The default theme mode of your SaaS product | `light` |
-| `NEXT_PUBLIC_THEME_COLOR` | The default theme color of your SaaS product | `#ffffff` |
-| `NEXT_PUBLIC_THEME_COLOR_DARK` | The default theme color of your SaaS product in dark mode | `#0a0a0a` |
-| `NEXT_PUBLIC_SUPABASE_URL` | The URL of your Supabase project | `http://127.0.0.1:54321` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | The anon key of your Supabase project | ''
-| `SUPABASE_SERVICE_ROLE_KEY` | The service role key of your Supabase project | ''
-
-## Architecture
-
-This starter kit uses a monorepo architecture.
-
-1. The `apps/web` directory is the Next.js application.
-2. The `packages` directory contains all the packages used by the application.
-3. The `packages/features` directory contains all the features of the application.
-4. The `packages/ui` directory contains all the UI components.
-
-For more information about the architecture, please refer to the [Makerkit blog post about Next.js Project Structure](https://makerkit.dev/blog/tutorials/nextjs-app-router-project-structure).
-
-### Marketing Pages
-
-Marketing pages are located in the `apps/web/app/(marketing)` directory. These pages are used to showcase the features of the SaaS and provide information about the product.
-
-### Authentication
-
-Authenticated is backed by Supabase. The `apps/web/app/auth` directory contains the authentication pages, however, the logic is into its own package `@kit/auth` located in `packages/features/auth`.
-
-This package can be used across multiple applications.
-
-### Gated Pages
-
-Gated pages are located in the `apps/web/app/home` directory. Here is where you can build your SaaS pages that are gated by authentication.
-
-### Database
-
-The Supabase database is located in the `apps/web/supabase` directory. In this directory you will find the database schema, migrations, and seed data.
-
-#### Creating a new migration
-To create a new migration, run the following command:
-
-```bash
-pnpm --filter web supabase migration new --name <migration-name>
-```
-
-This command will create a new migration file in the `apps/web/supabase/migrations` directory. 
-
-#### Applying a migration
-
-Once you have created a migration, you can apply it to the database by running the following command:
-
-```bash
-pnpm run supabase:web:reset
-```
-
-This command will apply the migration to the database and update the schema. It will also reset the database using the provided seed data.
-
-#### Linking the Supabase database
-
-Linking the local Supabase database to the Supabase project is done by running the following command:
-
-```bash
-pnpm --filter web supabase db link
-```
-
-This command will link the local Supabase database to the Supabase project.
-
-#### Pushing the migration to the Supabase project
-
-After you have made changes to the migration, you can push the migration to the Supabase project by running the following command:
-
-```bash
-pnpm --filter web supabase db push
-```
-
-This command will push the migration to the Supabase project. You can now apply the migration to the Supabase database.
-
-## Going to Production
-
-#### 1. Create a Supabase project
-
-To deploy your application to production, you will need to create a Supabase project.
-
-#### 2. Push the migration to the Supabase project
-
-After you have made changes to the migration, you can push the migration to the Supabase project by running the following command:
-
-```bash
-pnpm --filter web supabase db push
-```
-
-This command will push the migration to the Supabase project.
-
-#### 3. Set the Supabase Callback URL
-
-When working with a remote Supabase project, you will need to set the Supabase Callback URL.
-
-Please set the callback URL in the Supabase project settings to the following URL:
-
-`<url>/auth/callback`
-
-Where `<url>` is the URL of your application.
-
-#### 4. Deploy to Vercel or any other hosting provider
-
-You can deploy your application to any hosting provider that supports Next.js.
-
-#### 5. Deploy to Cloudflare
-
-The configuration should work as is, but you need to set the runtime to `edge` in the root layout file (`apps/web/app/layout.tsx`).
-
-```tsx
-export const runtime = 'edge';
-```
-
-Remember to enable Node.js compatibility in the Cloudflare dashboard.
-
-## Contributing
-
-Contributions for bug fixed are welcome! However, please open an issue first to discuss your ideas before making a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
-
-## Support
-
-No support is provided for this kit. Feel free to open an issue if you have any questions or need help, but there is no guaranteed response time, nor guarantee a fix.
-
-For dedicated support, priority fixes, and advanced features, [check out our full version](https://makerkit.dev).
+---

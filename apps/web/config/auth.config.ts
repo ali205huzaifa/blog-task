@@ -22,6 +22,9 @@ const AuthConfigSchema = z.object({
     magicLink: z.boolean({
       description: 'Enable magic link authentication.',
     }),
+    otp: z.boolean({
+      description: 'Enable OTP (email) passwordless authentication.',
+    }),
     oAuth: providers.array(),
   }),
 });
@@ -40,6 +43,7 @@ const authConfig = AuthConfigSchema.parse({
   providers: {
     password: process.env.NEXT_PUBLIC_AUTH_PASSWORD === 'true',
     magicLink: process.env.NEXT_PUBLIC_AUTH_MAGIC_LINK === 'true',
+    otp: process.env.NEXT_PUBLIC_AUTH_OTP === 'true',
     oAuth: ['google'],
   },
 } satisfies z.infer<typeof AuthConfigSchema>);

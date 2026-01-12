@@ -10,6 +10,7 @@ import { Separator } from '@kit/ui/separator';
 
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
+import { OTPSignInContainer } from './otp-sign-in-container';
 import { PasswordSignInContainer } from './password-sign-in-container';
 
 export function SignInMethodsContainer(props: {
@@ -21,6 +22,7 @@ export function SignInMethodsContainer(props: {
   providers: {
     password: boolean;
     magicLink: boolean;
+    otp?: boolean;
     oAuth: Provider[];
   };
 }) {
@@ -46,6 +48,10 @@ export function SignInMethodsContainer(props: {
           redirectUrl={redirectUrl}
           shouldCreateUser={false}
         />
+      </If>
+
+      <If condition={props.providers.otp}>
+        <OTPSignInContainer redirectUrl={redirectUrl} />
       </If>
 
       <If condition={props.providers.oAuth.length}>

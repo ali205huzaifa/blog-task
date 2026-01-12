@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { Toaster } from '@kit/ui/sonner';
 import { cn } from '@kit/ui/utils';
 
+import { HeaderProfile } from '~/components/HeaderProfile';
 import { RootProviders } from '~/components/root-providers';
 import { heading, sans } from '~/lib/fonts';
 import { createI18nServerInstance } from '~/lib/i18n/i18n.server';
@@ -24,9 +25,13 @@ export default async function RootLayout({
       <body>
         <RootProviders theme={theme} lang={language}>
           {children}
-        </RootProviders>
 
-        <Toaster richColors={true} theme={theme} position="top-center" />
+          {/* <header className="flex justify-between border-b p-4">
+            <span className="font-bold">Blog</span>
+            <HeaderProfile />
+          </header> */}
+          <Toaster richColors={true} theme={theme} position="top-center" />
+        </RootProviders>
       </body>
     </html>
   );

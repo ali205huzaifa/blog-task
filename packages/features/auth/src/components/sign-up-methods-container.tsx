@@ -8,6 +8,7 @@ import { Separator } from '@kit/ui/separator';
 
 import { MagicLinkAuthContainer } from './magic-link-auth-container';
 import { OauthProviders } from './oauth-providers';
+import { OTPSignUpContainer } from './otp-sign-up-container';
 import { EmailPasswordSignUpContainer } from './password-sign-up-container';
 
 export function SignUpMethodsContainer(props: {
@@ -19,6 +20,7 @@ export function SignUpMethodsContainer(props: {
   providers: {
     password: boolean;
     magicLink: boolean;
+    otp?: boolean;
     oAuth: Provider[];
   };
 
@@ -32,6 +34,14 @@ export function SignUpMethodsContainer(props: {
       <If condition={props.providers.password}>
         <EmailPasswordSignUpContainer
           emailRedirectTo={redirectUrl}
+          defaultValues={defaultValues}
+          displayTermsCheckbox={props.displayTermsCheckbox}
+        />
+      </If>
+
+      <If condition={props.providers.otp}>
+        <OTPSignUpContainer
+          redirectUrl={redirectUrl}
           defaultValues={defaultValues}
           displayTermsCheckbox={props.displayTermsCheckbox}
         />

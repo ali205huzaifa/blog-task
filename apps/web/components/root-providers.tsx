@@ -18,6 +18,7 @@ import featuresFlagConfig from '~/config/feature-flags.config';
 import { i18nResolver } from '~/lib/i18n/i18n.resolver';
 import { getI18nSettings } from '~/lib/i18n/i18n.settings';
 
+import { ApolloClientProvider } from './apollo-provider';
 import { ReactQueryProvider } from './react-query-provider';
 
 const captchaSiteKey = authConfig.captchaTokenSiteKey;
@@ -45,28 +46,30 @@ export function RootProviders({
   const i18nSettings = useMemo(() => getI18nSettings(lang), [lang]);
 
   return (
-    <ReactQueryProvider>
-      <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
-        <CaptchaProvider>
-          <CaptchaTokenSetter siteKey={captchaSiteKey} />
+    <ApolloClientProvider>
+      <ReactQueryProvider>
+        <I18nProvider settings={i18nSettings} resolver={i18nResolver}>
+          <CaptchaProvider>
+            <CaptchaTokenSetter siteKey={captchaSiteKey} />
 
-          <AuthProvider>
-            <ThemeProvider
-              attribute="class"
-              enableSystem
-              disableTransitionOnChange
-              defaultTheme={theme}
-              enableColorScheme={false}
-            >
-              {children}
-            </ThemeProvider>
-          </AuthProvider>
-        </CaptchaProvider>
+            <AuthProvider>
+              <ThemeProvider
+                attribute="class"
+                enableSystem
+                disableTransitionOnChange
+                defaultTheme={theme}
+                enableColorScheme={false}
+              >
+                {children}
+              </ThemeProvider>
+            </AuthProvider>
+          </CaptchaProvider>
 
-        <If condition={featuresFlagConfig.enableVersionUpdater}>
-          <VersionUpdater />
-        </If>
-      </I18nProvider>
-    </ReactQueryProvider>
+          <If condition={featuresFlagConfig.enableVersionUpdater}>
+            <VersionUpdater />
+          </If>
+        </I18nProvider>
+      </ReactQueryProvider>
+    </ApolloClientProvider>
   );
 }
