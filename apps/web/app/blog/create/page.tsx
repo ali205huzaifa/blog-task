@@ -1,7 +1,10 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter } from 'next/navigation';
 
+import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/client/react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -9,25 +12,47 @@ import { toast } from 'sonner';
 
 import { Button } from '@kit/ui/button';
 
-import { CREATE_POST } from '~/features/blog/graphql/mutations';
 import {
   BlogFormValues,
   blogSchema,
 } from '~/features/blog/schemas/blog.schema';
 import { useAuth } from '~/lib/auth/use-auth';
 
+const CREATE_POST = gql`
+  mutation CREATE_POST($objects: [postsInsertInput!]!) {
+    insertIntopostsCollection(objects: $objects) {
+      id
+      title
+      body
+      author_id
+      created_at
+    }
+  }
+`;
+
 export default function CreateBlogPage() {
   const router = useRouter();
   const { user } = useAuth();
 
-  const [createPost, { loading: isSubmitting }] = useMutation(CREATE_POST);
+  const [createPost, { loading: isSubmitting }] = useMutation<
+    {
+      insertIntopostsCollection: Array<{
+        id: string;
+        title: string;
+        body: string;
+        author_id: string;
+        created_at: string;
+      }>;
+    },
+    { objects: Array<{ title: string; body: string; author_id: string }> }
+  >(CREATE_POST);
 
   const form = useForm<BlogFormValues>({
     resolver: zodResolver(blogSchema),
   });
 
   const onSubmit = async (values: BlogFormValues) => {
-    if (!user) {
+    if (!user?.data?.sub) {
       toast.error('You must be logged in to create a post');
       return;
     }
@@ -35,12 +60,17 @@ export default function CreateBlogPage() {
     try {
       const result = await createPost({
         variables: {
-          ...values,
-          author_id: user.sub,
+          objects: [
+            {
+              title: values.title,
+              body: values.body,
+              author_id: user.data.sub, // Must be UUID
+            },
+          ],
         },
       });
 
-      if (result.data?.insert_posts_one) {
+      if (result.data?.insertIntopostsCollection?.[0]) {
         toast.success('Post created successfully!');
         router.push('/blog');
       }

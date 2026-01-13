@@ -47,3 +47,7 @@ yarn-error.log*
 .contentlayer/
 
 .env
+
+apps/web/.env.development
+apps/web/.env.production
+apps/web/.env.test

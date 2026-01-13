@@ -26,7 +26,11 @@ export class BlogService {
   createPost(input: { title: string; body: string; author_id: string }) {
     return this.client.mutate({
       mutation: CREATE_POST,
-      variables: input,
+      variables: {
+        title: input.title,
+        body: input.body,
+        author_id: input.author_id,
+      },
     });
   }
 }

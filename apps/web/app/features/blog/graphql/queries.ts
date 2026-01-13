@@ -7,9 +7,7 @@ export const GET_POSTS = gql`
       title
       body
       created_at
-      author {
-        email
-      }
+      author_id
     }
     posts_aggregate {
       aggregate {
@@ -26,9 +24,7 @@ export const GET_POST_BY_ID = gql`
       title
       body
       created_at
-      author {
-        email
-      }
+      author_id
     }
   }
 `;

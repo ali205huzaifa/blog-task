@@ -1,12 +1,13 @@
 import { gql } from '@apollo/client';
 
 export const CREATE_POST = gql`
-  mutation CreatePost($title: String!, $body: String!, $author_id: uuid!) {
-    insert_posts_one(
-      object: { title: $title, body: $body, author_id: $author_id }
-    ) {
+  mutation CREATE_POST($objects: [postsInsertInput!]!) {
+    insertIntopostsCollection(objects: $objects) {
       id
       title
+      body
+      author_id
+      created_at
     }
   }
 `;
